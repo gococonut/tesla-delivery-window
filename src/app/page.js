@@ -3,13 +3,7 @@ import axios from "axios";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
@@ -24,6 +18,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { ToastAction } from "@/components/ui/toast";
+
 const FormSchema = z.object({
   orderNum: z.string().min(1, {
     message: "required",
@@ -35,6 +30,7 @@ const FormSchema = z.object({
 
 function Home() {
   const [isLoading, setIsLoading] = useState(false);
+  const [showFollowButton, setShowFollowButton] = useState(false);
   const { toast } = useToast();
   const form = useForm({
     resolver: zodResolver(FormSchema),
@@ -57,6 +53,7 @@ function Home() {
     try {
       const message = await checkDeliveryStatus(data.orderNum, data.token);
       setIsLoading(false);
+      setShowFollowButton(true);
       toast({
         title: "Delivery Window",
         description: message,
@@ -64,12 +61,14 @@ function Home() {
         duration: 120000,
       });
     } catch (error) {
+      setShowFollowButton(false);
       setIsLoading(false);
       toast({
         variant: "destructive",
         title: "invalid order number or token",
       });
     }
+    setShowFollowButton(true);
   }
 
   return (
@@ -120,6 +119,24 @@ function Home() {
               <Button type="submit" disabled={isLoading}>
                 {isLoading ? "Processing..." : "Submit"}
               </Button>
+              {showFollowButton && (
+                <div className="mt-4 flex items-center text-zinc-800">
+                  <p className="text-[0.8rem]">
+                    如果缓解了您的等车焦虑，赏个关注
+                  </p>
+                  <Button
+                    className="text-[0.8rem] text-rose-500"
+                    variant="link"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      window.location.href =
+                        "https://www.xiaohongshu.com/user/profile/5c3bfa7c00000000060304c5?xhsshare=CopyLink&appuid=5c3bfa7c00000000060304c5&apptime=1729843629&share_id=86e3c52a12af450f88502629c40d1799";
+                    }}
+                  >
+                    @信都人
+                  </Button>
+                </div>
+              )}
             </form>
           </Form>{" "}
         </CardContent>
