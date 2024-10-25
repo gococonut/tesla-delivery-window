@@ -74,7 +74,7 @@ function Home() {
 
   return (
     <div
-      className="flex items-center justify-center min-h-screen bg-cover bg-center"
+      className="flex items-center justify-center min-h-screen max-h-screen overflow-y-hidden bg-cover bg-center"
       style={{ backgroundImage: "url('/background.jpg')" }}
     >
       <Card className="w-[350px]">
