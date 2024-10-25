@@ -47,7 +47,7 @@ export async function POST(req) {
 
     return NextResponse.json(
       {
-        message: `预计交付时间：${data?.tasks?.scheduling?.deliveryWindowDisplay}`,
+        message: `预计交付日期：${data?.tasks?.scheduling?.deliveryWindowDisplay}`,
       },
       { status: 200 }
     );

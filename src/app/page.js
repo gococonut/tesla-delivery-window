@@ -85,7 +85,7 @@ function Home() {
           <Form {...form}>
             <form
               onSubmit={form.handleSubmit(onSubmit)}
-              className="w space-y-6"
+              className="w space-y-6 text-md"
             >
               <FormField
                 control={form.control}
@@ -118,7 +118,7 @@ function Home() {
                 )}
               />
               <Button type="submit" disabled={isLoading}>
-                {isLoading ? "..." : "Submit"}
+                {isLoading ? "Processing..." : "Submit"}
               </Button>
             </form>
           </Form>{" "}
