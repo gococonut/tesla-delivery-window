@@ -24,6 +24,13 @@ export default function RootLayout({ children }) {
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <script
+          defer
+          src="//webviso.yestool.org/js/index.min.js"
+          data-base-url="https://analytics.fusever.com"
+          data-page-pv-id="page_pv"
+          data-page-uv-id="page_uv"
+        ></script>
         {children}
         <Toaster />
       </body>
