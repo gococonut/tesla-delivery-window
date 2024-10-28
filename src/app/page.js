@@ -6,7 +6,7 @@ import { z } from "zod";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Form,
   FormControl,
@@ -32,6 +32,7 @@ function Home() {
   const [isLoading, setIsLoading] = useState(false);
   const [showFollowButton, setShowFollowButton] = useState(false);
   const { toast } = useToast();
+
   const form = useForm({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -39,6 +40,13 @@ function Home() {
       token: "",
     },
   });
+
+  useEffect(() => {
+    const savedData = localStorage.getItem("formData");
+    if (savedData) {
+      form.reset(JSON.parse(savedData));
+    }
+  }, [form]);
 
   async function checkDeliveryStatus(orderNum, token) {
     const response = await axios.post("/api/deliveryStatus", {
@@ -54,6 +62,7 @@ function Home() {
       const message = await checkDeliveryStatus(data.orderNum, data.token);
       setIsLoading(false);
       setShowFollowButton(true);
+      localStorage.setItem("formData", JSON.stringify(data));
       toast({
         title: "Delivery Window",
         description: message,
@@ -65,7 +74,7 @@ function Home() {
       setIsLoading(false);
       toast({
         variant: "destructive",
-        title: "invalid order number or token",
+        title: "核对订单号或 app 刷新 Token 重新填写",
       });
     }
     setShowFollowButton(true);
@@ -138,7 +147,7 @@ function Home() {
                 </div>
               )}
             </form>
-          </Form>{" "}
+          </Form>
         </CardContent>
       </Card>
     </div>
