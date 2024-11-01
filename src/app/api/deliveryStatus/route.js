@@ -38,16 +38,23 @@ export async function POST(req) {
       );
     }
 
-    if (estimatedDeliveryDates) {
-      return NextResponse.json(
-        { message: estimatedDeliveryDates },
-        { status: 200 }
-      );
+    let message = estimatedDeliveryDates
+      ? estimatedDeliveryDates
+      : "暂无交付窗口";
+    if (
+      !estimatedDeliveryDates &&
+      data?.tasks?.scheduling?.deliveryWindowDisplay
+    ) {
+      message = `预计交付日期：${data?.tasks?.scheduling?.deliveryWindowDisplay}`;
+    }
+
+    if (data?.tasks?.registration?.orderDetails?.vin) {
+      message = `${message} \n 车辆识别码（VIN）：${data.tasks.registration.orderDetails.vin}`;
     }
 
     return NextResponse.json(
       {
-        message: `预计交付日期：${data?.tasks?.scheduling?.deliveryWindowDisplay}`,
+        message: `${message}`,
       },
       { status: 200 }
     );
